@@ -98,3 +98,28 @@ export function useDayNames(
     return days;
   }, [firstDayOfWeek, formatter]);
 }
+
+export type MonthOption = {
+  month: NonNullable<Intl.DateTimeFormatOptions["month"]>;
+};
+
+export function useMonthNames(
+  options: MonthOption,
+  locale?: string
+) {
+  const formatter = useDateFormatter(options, locale);
+
+  return useMemo(() => {
+    const months = [];
+    const day = new Date();
+    day.setUTCDate(1);
+
+    for (var i = 0; i < 12; i++) {
+      const index = (day.getUTCMonth() + 12) % 12;
+      months[index] = formatter.format(day);
+      day.setUTCMonth(day.getUTCMonth() + 1);
+    }
+
+    return months;
+  }, [formatter]);
+}
