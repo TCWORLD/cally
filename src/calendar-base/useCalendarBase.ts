@@ -16,7 +16,7 @@ export interface PageChangeDetail {
   end: Date;
 }
 
-export type Pagination = "single" | "months";
+export type Pagination = "single" | "months" | "years";
 
 type CalendarBaseOptions = {
   months: number;
@@ -32,15 +32,18 @@ function diffInMonths(a: PlainYearMonth, b: PlainYearMonth): number {
 
 const createPage = (
   start: PlainYearMonth,
-  months: number,
+  steps: number,
   pageBy: Pagination = "months",
 ) => {
-  if (months === 12 && pageBy !== "single") {
+  if (pageBy === "years") {
+    steps = steps * 12;
+  } 
+  if (steps === 12 && pageBy !== "single") {
     start = new PlainYearMonth(start.year, 1);
   }
   return {
     start,
-    end: start.add({ months: months - 1 }),
+    end: start.add({ months: steps - 1 }),
   };
 };
 
@@ -54,7 +57,7 @@ type UsePaginationOptions = {
 };
 
 export interface CalendarFocusOptions extends FocusOptions {
-  target?: "day" | "next" | "previous";
+  target?: "day" | "month" | "next" | "previous";
 }
 
 function usePagination({
@@ -161,6 +164,10 @@ export function useCalendarBase({
     if (target === "day") {
       host.current
         .querySelectorAll<HTMLElement>("calendar-month")
+        .forEach((m) => m.focus(options));
+    } else if (target === "month") {
+      host.current
+        .querySelectorAll<HTMLElement>("calendar-year")
         .forEach((m) => m.focus(options));
     } else {
       host.current
