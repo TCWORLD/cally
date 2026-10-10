@@ -64,7 +64,7 @@ export function endOfMonth(date: { year: number; month: number }): PlainDate {
 }
 
 export function endOfYear(date: { year: number }): PlainDate {
-  return PlainDate.from(new Date(Date.UTC(date.year, 11, 0)));
+  return PlainDate.from(new Date(Date.UTC(date.year, 12, 0)));
 }
 
 /**
