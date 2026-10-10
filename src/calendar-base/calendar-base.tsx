@@ -5,10 +5,16 @@ import {
   type CalendarMultiContext,
   type CalendarRangeContext,
 } from "../calendar-month/CalendarMonthContext.js";
+import {
+  CalendarYearContext,
+  type CalendarYearDateContext,
+  type CalendarYearMultiContext,
+  type CalendarYearRangeContext,
+} from "../calendar-year/CalendarYearContext.js";
 import { CalendarHeading } from "../calendar-heading/calendar-heading.js";
 import { reset, vh } from "../utils/styles.js";
 import { type DaysOfWeek } from "../utils/date.js";
-import type { PlainDate } from "../utils/temporal.js";
+import type { PlainDate, PlainYearMonth } from "../utils/temporal.js";
 import type { Pagination } from "./useCalendarBase.js";
 
 interface CalendarBaseProps {
@@ -23,6 +29,9 @@ interface CalendarBaseProps {
 interface CalendarRangeProps extends CalendarBaseProps, CalendarRangeContext {}
 interface CalendarDateProps extends CalendarBaseProps, CalendarDateContext {}
 interface CalendarMultiProps extends CalendarBaseProps, CalendarMultiContext {}
+interface CalendarYearRangeProps extends CalendarBaseProps, CalendarYearRangeContext {}
+interface CalendarYearDateProps extends CalendarBaseProps, CalendarYearDateContext {}
+interface CalendarYearMultiProps extends CalendarBaseProps, CalendarYearMultiContext {}
 
 function Button(props: {
   name: string;
@@ -41,41 +50,54 @@ function Button(props: {
 }
 
 export function CalendarBase(
-  props: CalendarDateProps | CalendarRangeProps | CalendarMultiProps
+  props: CalendarDateProps | CalendarRangeProps | CalendarMultiProps |
+         CalendarYearDateProps | CalendarYearRangeProps | CalendarYearMultiProps
 ) {
-  return (
+  const content = (
+    <div role="group" aria-labelledby="h" part="container">
+      <CalendarHeading
+        month="long"
+        year="numeric"
+        id="h"
+        class="vh"
+        aria-live="polite"
+        aria-atomic="true"
+      />
+
+      <div part="header">
+        <Button name="previous" onclick={props.previous}>
+          Previous
+        </Button>
+
+        <slot part="heading" name="heading">
+          <CalendarHeading year="numeric" aria-hidden="true" />
+        </slot>
+
+        <Button name="next" onclick={props.next}>
+          Next
+        </Button>
+      </div>
+
+      <slot part="months"></slot>
+    </div>
+  );
+  return props.group === "year" ? (
+    <CalendarYearContext
+      value={props}
+      onselectmonth={props.onSelect}
+      onfocusmonth={props.onFocus}
+      onhovermonth={props.onHover}
+    >
+      {content}
+    </CalendarYearContext>
+  ) : (
     <CalendarContext
       value={props}
       onselectday={props.onSelect}
       onfocusday={props.onFocus}
       onhoverday={props.onHover}
     >
-      <div role="group" aria-labelledby="h" part="container">
-        <CalendarHeading
-          month="long"
-          year="numeric"
-          id="h"
-          class="vh"
-          aria-live="polite"
-          aria-atomic="true"
-        />
-
-        <div part="header">
-          <Button name="previous" onclick={props.previous}>
-            Previous
-          </Button>
-
-          <slot part="heading" name="heading">
-            <CalendarHeading year="numeric" aria-hidden="true" />
-          </slot>
-
-          <Button name="next" onclick={props.next}>
-            Next
-          </Button>
-        </div>
-
-        <slot part="months"></slot>
-      </div>
+      {content}
     </CalendarContext>
   );
 }

@@ -135,6 +135,7 @@ export function useCalendarBase({
   const [max] = useDateProp("max");
   const [today] = useDateProp("today");
   const dispatchFocusDay = useEvent<Date>("focusday");
+  const dispatchFocusMonth = useEvent<Date>("focusmonth");
   const dispatch = useEvent("change");
 
   const focusedDate = useMemo(

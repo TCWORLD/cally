@@ -14,6 +14,7 @@ export const CalendarDate = c(
   ): Host<{
     onChange: Event;
     onFocusDay: CustomEvent<Date>;
+    onFocusMonth: CustomEvent<Date>;
     onPageChange: CustomEvent<PageChangeDetail>;
     focus: (options?: CalendarFocusOptions) => void;
   }> => {

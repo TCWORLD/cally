@@ -114,7 +114,7 @@ describe("CalendarYear", () => {
           <Fixture
             focusedDate={PlainYearMonth.from("2020-01-01")}
             type="range"
-            value={[PlainYearMonth.from("2020-01-01"), PlainYearMonth.from("2020-04-03")]}
+            value={[PlainDate.from("2020-01-01"), PlainDate.from("2020-04-03")]}
           />,
         );
 
@@ -155,7 +155,7 @@ describe("CalendarYear", () => {
         const month = await mount(
           <Fixture
             focusedDate={PlainYearMonth.from("2020-01-01")}
-            value={PlainYearMonth.from("2020-01-01")}
+            value={PlainDate.from("2020-01-01")}
           />,
         );
 
@@ -188,9 +188,9 @@ describe("CalendarYear", () => {
             focusedDate={PlainYearMonth.from("2020-01-01")}
             type="multi"
             value={[
-              PlainYearMonth.from("2020-01-01"),
-              PlainYearMonth.from("2020-01-02"),
-              PlainYearMonth.from("2020-01-03"),
+              PlainDate.from("2020-01-01"),
+              PlainDate.from("2020-01-02"),
+              PlainDate.from("2020-01-03"),
             ]}
           />,
         );

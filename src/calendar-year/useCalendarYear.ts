@@ -64,7 +64,7 @@ export function useCalendarYear({ props, context }: UseCalendarYearOptions) {
   const dispatchSelectMonth = useEvent<PlainYearMonth>("selectmonth", dispatchOptions);
   const dispatchHoverMonth = useEvent<PlainYearMonth>("hovermonth", dispatchOptions);
 
-  function focusDay(date: PlainYearMonth) {
+  function focusMonth(date: PlainYearMonth) {
     dispatchFocusMonth(clamp(date, min, max));
   }
 
@@ -100,7 +100,7 @@ export function useCalendarYear({ props, context }: UseCalendarYearOptions) {
         return;
     }
 
-    focusDay(date);
+    focusMonth(date);
     e.preventDefault();
   }
 
@@ -118,9 +118,9 @@ export function useCalendarYear({ props, context }: UseCalendarYearOptions) {
 
     if (context.type === "range") {
       const [start, end] = context.value;
-      const isRangeStart = start?.equals(date);
-      const isRangeEnd = end?.equals(date);
-      isSelected = start && end && inRange(date, start, end);
+      const isRangeStart = start && date.equals(start);
+      const isRangeEnd = end && date.equals(end);
+      isSelected = start && end && inRange(date, start.toPlainYearMonth(), end.toPlainYearMonth());
 
       // prettier-ignore
       parts = `${
@@ -131,9 +131,9 @@ export function useCalendarYear({ props, context }: UseCalendarYearOptions) {
         isSelected && !isRangeStart && !isRangeEnd ? "range-inner" : ""
       }`;
     } else if (context.type === "multi") {
-      isSelected = context.value.some((d) => d.equals(date));
+      isSelected = context.value.some((d) => date.equals(d));
     } else {
-      isSelected = context.value?.equals(date);
+      isSelected = context.value && date.equals(context.value);
     }
 
     // prettier-ignore
@@ -161,7 +161,7 @@ export function useCalendarYear({ props, context }: UseCalendarYearOptions) {
         if (!isDisallowed) {
           dispatchSelectMonth(date);
         }
-        focusDay(date);
+        focusMonth(date);
       },
       onmouseover() {
         if (!isDisallowed && !isDisabled) {

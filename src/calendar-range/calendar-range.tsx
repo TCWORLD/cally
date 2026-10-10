@@ -21,6 +21,7 @@ export const CalendarRange = c(
     onRangeEnd: CustomEvent<Date>;
     onPageChange: CustomEvent<PageChangeDetail>;
     onFocusDay: CustomEvent<Date>;
+    onFocusMonth: CustomEvent<Date>;
     focus: (options?: CalendarFocusOptions) => void;
   }> => {
     const [value, setValue] = useDateRangeProp("value");

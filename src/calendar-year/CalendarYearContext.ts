@@ -1,5 +1,5 @@
 import { createContext } from "atomico";
-import type { PlainYear, PlainYearMonth } from "../utils/temporal.js";
+import type { PlainDate, PlainYear, PlainYearMonth } from "../utils/temporal.js";
 import { getToday } from "../utils/date.js";
 
 interface CalendarYearContextBase {
@@ -13,21 +13,22 @@ interface CalendarYearContextBase {
   showQuarterNumbers?: boolean;
   locale?: string;
   formatMonth: "long" | "short" | "numeric" | "narrow";
+  group: "year";
 }
 
 export interface CalendarYearDateContext extends CalendarYearContextBase {
   type: "date";
-  value?: PlainYearMonth;
+  value?: PlainDate;
 }
 
 export interface CalendarYearRangeContext extends CalendarYearContextBase {
   type: "range";
-  value: [PlainYearMonth, PlainYearMonth] | [];
+  value: [PlainDate, PlainDate] | [];
 }
 
 export interface CalendarYearMultiContext extends CalendarYearContextBase {
   type: "multi";
-  value: PlainYearMonth[];
+  value: PlainDate[];
 }
 
 export type CalendarYearContextValue =

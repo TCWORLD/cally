@@ -15,6 +15,7 @@ interface CalendarContextBase {
   showWeekNumbers?: boolean;
   locale?: string;
   formatWeekday: "narrow" | "short";
+  group: "month";
 }
 
 export interface CalendarDateContext extends CalendarContextBase {
