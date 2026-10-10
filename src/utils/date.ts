@@ -107,10 +107,10 @@ export function getViewOfMonth(
 
 interface DateLike {
   year: number;
-  month: number;
+  month?: number;
   day?: number;
 }
 
 export function toDate(date: DateLike): Date {
-  return new Date(Date.UTC(date.year, date.month - 1, date.day ?? 1));
+  return new Date(Date.UTC(date.year, (date.month ?? 1) - 1, date.day ?? 1));
 }
