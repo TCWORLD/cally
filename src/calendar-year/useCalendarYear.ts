@@ -56,7 +56,7 @@ export function useCalendarYear({ props, context }: UseCalendarYearOptions) {
   useProvider(CalendarHeadingContext, { type: "date", value: year.toPlainYearMonth(), locale });
 
   const quarters = useMemo(
-    () => getViewOfYear(year),
+    () => getViewOfYear(year, 1),
     [year]
   );
 

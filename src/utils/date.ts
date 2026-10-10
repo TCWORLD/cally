@@ -145,13 +145,16 @@ export function getViewOfMonth(
 }
 
 /**
- * given a date, return an array of quarters from a calendar perspective
+ * Given a date, return an array of quarters from a calendar perspective
+ * Optionally expand to include the specified number of quarters before 
+ * and after the selected year.
  */
 export function getViewOfYear(
-  year: PlainYear
+  year: PlainYear,
+  expand = 0
 ): Quarter[] {
-  let start = year.toPlainYearMonth();
-  const end = endOfYear(year);
+  let start = year.toPlainYearMonth().add({"months": -3*expand});
+  const end = endOfYear(year).add({"months": 3*expand});
 
   const quarters = [];
 
