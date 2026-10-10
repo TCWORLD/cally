@@ -17,7 +17,7 @@ const inRange = (date: PlainYearMonth, min?: PlainYearMonth, max?: PlainYearMont
 
 const isLTR = (e: Event) => (e.target as HTMLElement).matches(":dir(ltr)");
 
-const monthOptions = { month: "long" } as const;
+const monthOptions = { month: "long", year: "numeric" } as const;
 const longMonthOptions = { month: "long" } as const;
 const dispatchOptions = { bubbles: true };
 
@@ -42,7 +42,7 @@ export function useCalendarYear({ props, context }: UseCalendarYearOptions) {
   const todaysDate = today ?? getToday();
   const monthsLong = useMonthNames(longMonthOptions, locale);
   const visibleMonthOptions = useMemo(
-    () => ({ month: formatMonth }),
+    () => ({ month: formatMonth ?? "short" }),
     [formatMonth]
   );
   const monthsVisible = useMonthNames(visibleMonthOptions, locale);

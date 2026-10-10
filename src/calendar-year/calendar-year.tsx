@@ -23,10 +23,10 @@ export const CalendarYear = c(
 
     return (
       <host shadowDom focus={focus}>
-        <CalendarHeading month="long" id="h" class="vh" />
+        <CalendarHeading year="numeric" id="h" class="vh" />
 
         <slot name="heading" part="heading">
-          <CalendarHeading month="long" aria-hidden="true" />
+          <CalendarHeading year="numeric" aria-hidden="true" />
         </slot>
 
         <table ref={table} aria-labelledby="h" part="table" role="presentation">
@@ -53,8 +53,7 @@ export const CalendarYear = c(
                     <td part="td" key={j}>
                       {props && (
                         <button class="num" {...props}>
-                          <span class="vh">{calendar.monthsLong[date.month]}</span>
-                          <span aria-hidden="true">{calendar.monthsVisible[date.month]}</span>
+                          {calendar.monthsVisible[date.month - 1]}
                         </button>
                       )}
                     </td>
