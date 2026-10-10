@@ -1,4 +1,4 @@
-import { PlainDate, type PlainYearMonth } from "./temporal.js";
+import { PlainDate, PlainYearMonth } from "./temporal.js";
 
 export type DaysOfWeek = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -41,6 +41,10 @@ export function startOfWeek(
   return PlainDate.from(d);
 }
 
+export function startOfYear(date: { year: number }): PlainDate {
+  return PlainDate.from(new Date(Date.UTC(date.year, 0, 1)));
+}
+
 export function endOfWeek(
   date: PlainDate,
   firstDayOfWeek: DaysOfWeek = 0
@@ -50,6 +54,10 @@ export function endOfWeek(
 
 export function endOfMonth(date: { year: number; month: number }): PlainDate {
   return PlainDate.from(new Date(Date.UTC(date.year, date.month, 0)));
+}
+
+export function endOfYear(date: { year: number }): PlainDate {
+  return PlainDate.from(new Date(Date.UTC(date.year, 12, 0)));
 }
 
 /**
@@ -107,10 +115,10 @@ export function getViewOfMonth(
 
 interface DateLike {
   year: number;
-  month: number;
+  month?: number;
   day?: number;
 }
 
 export function toDate(date: DateLike): Date {
-  return new Date(Date.UTC(date.year, date.month - 1, date.day ?? 1));
+  return new Date(Date.UTC(date.year, (date.month ?? 1) - 1, date.day ?? 1));
 }
