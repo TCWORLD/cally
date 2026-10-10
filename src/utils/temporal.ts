@@ -113,7 +113,7 @@ export class PlainYearMonth {
   }
 
   equals(date: PlainDate | PlainYearMonth | PlainYear) {
-    return this.year === date.year && this.month === date.month;
+    return this.year === date.year && (date instanceof PlainYear || this.month === date.month);
   }
 
   toPlainDate() {
@@ -160,7 +160,6 @@ export class PlainYearMonth {
 type YearDuration = { years?: number };
 
 export class PlainYear {
-  public readonly month = 0;
   constructor(
     public readonly year: number
   ) {}
@@ -173,15 +172,15 @@ export class PlainYear {
   }
 
   equals(date: PlainDate | PlainYearMonth | PlainYear) {
-    return this.year === date.year && this.month === date.month;
+    return this.year === date.year;
   }
 
   toPlainDate() {
-    return new PlainDate(this.year, this.month, 1);
+    return new PlainDate(this.year, 1, 1);
   }
   
   toPlainYearMonth() {
-    return new PlainYearMonth(this.year, this.month);
+    return new PlainYearMonth(this.year, 1);
   }
 
   static compare(
