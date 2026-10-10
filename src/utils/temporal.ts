@@ -54,6 +54,10 @@ export class PlainDate {
     return new PlainYearMonth(this.year, this.month);
   }
 
+  toPlainYear() {
+    return new PlainYear(this.year);
+  }
+
   equals(date: PlainDate): boolean {
     return PlainDate.compare(this, date) === 0;
   }
@@ -108,12 +112,16 @@ export class PlainYearMonth {
     return new PlainYearMonth(date.getUTCFullYear(), date.getUTCMonth() + 1);
   }
 
-  equals(date: PlainDate | PlainYearMonth) {
-    return this.year === date.year && this.month === date.month;
+  equals(date: PlainDate | PlainYearMonth | PlainYear) {
+    return this.year === date.year && (date instanceof PlainYear || this.month === date.month);
   }
 
   toPlainDate() {
     return new PlainDate(this.year, this.month, 1);
+  }
+
+  toPlainYear() {
+    return new PlainYear(this.year);
   }
 
   static compare(
@@ -124,6 +132,63 @@ export class PlainYearMonth {
     if (a.year > b.year) return 1;
     if (a.month < b.month) return -1;
     if (a.month > b.month) return 1;
+    return 0;
+  }
+  
+  static from(value: string | Date): PlainYearMonth {
+    if (typeof value === "string") {
+      const match = value.match(ISO_DATE);
+
+      if (!match) {
+        throw new TypeError(value);
+      }
+
+      const [, year, month, day] = match;
+      return new PlainYearMonth(
+        parseInt(year!, 10),
+        parseInt(month!, 10)
+      );
+    }
+
+    return new PlainYearMonth(
+      value.getUTCFullYear(),
+      value.getUTCMonth() + 1
+    );
+  }
+}
+``
+type YearDuration = { years?: number };
+
+export class PlainYear {
+  constructor(
+    public readonly year: number
+  ) {}
+
+  add(duration: YearDuration) {
+    const date = toDate(this);
+    date.setUTCFullYear(date.getUTCFullYear() + (duration.years ?? 0));
+
+    return new PlainYear(date.getUTCFullYear());
+  }
+
+  equals(date: PlainDate | PlainYearMonth | PlainYear) {
+    return this.year === date.year;
+  }
+
+  toPlainDate() {
+    return new PlainDate(this.year, 1, 1);
+  }
+  
+  toPlainYearMonth() {
+    return new PlainYearMonth(this.year, 1);
+  }
+
+  static compare(
+    a: PlainYear | { year: number },
+    b: PlainYear | { year: number }
+  ): CompareResult {
+    if (a.year < b.year) return -1;
+    if (a.year > b.year) return 1;
     return 0;
   }
 }

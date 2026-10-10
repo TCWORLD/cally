@@ -4,6 +4,7 @@ import type { VNodeAny } from "atomico/types/vnode";
 import type { CalendarDate } from "../calendar-date/calendar-date.js";
 import type { CalendarMonth } from "../calendar-month/calendar-month.js";
 import type { CalendarRange } from "../calendar-range/calendar-range.js";
+import type { CalendarYear } from "../calendar-year/calendar-year.js";
 
 async function nextFrame() {
   return new Promise((resolve) =>
@@ -48,7 +49,8 @@ export function createSpy<T extends SpySubject>(fn?: T) {
   };
 }
 
-export type MonthInstance = InstanceType<typeof CalendarMonth>;
+export type MonthInstance = InstanceType<typeof CalendarMonth> 
+export type YearInstance = InstanceType<typeof CalendarYear>;
 export type CalendarInstance =
   | InstanceType<typeof CalendarDate>
   | InstanceType<typeof CalendarRange>;
@@ -67,7 +69,15 @@ export function getMonth(calendar: HTMLElement): MonthInstance {
   return getMonths(calendar)[0]!;
 }
 
-export function getGrid(month: MonthInstance): HTMLTableElement {
+export function getYears(calendar: HTMLElement): YearInstance[] {
+  return [...calendar.querySelectorAll<YearInstance>("calendar-year")!];
+}
+
+export function getYear(calendar: HTMLElement): YearInstance {
+  return getYears(calendar)[0]!;
+}
+
+export function getGrid(month: MonthInstance | YearInstance): HTMLTableElement {
   return month.shadowRoot!.querySelector(`[part="table"]`)!;
 }
 
@@ -100,20 +110,26 @@ export function getCalendarHeading(calendar: CalendarInstance) {
   return heading.shadowRoot?.textContent;
 }
 
-export function getMonthHeading(month: MonthInstance) {
-  const table = getGrid(month);
+function getHeading(instance: MonthInstance | YearInstance, type: "month" | "year") {
+  const table = getGrid(instance);
 
   const labelledById = table.getAttribute("aria-labelledby");
   if (!labelledById) {
     throw new Error("No aria-labelledby attribute found on table");
   }
 
-  const heading = month.shadowRoot!.getElementById(labelledById);
+  const heading = instance.shadowRoot!.getElementById(labelledById);
   if (!heading) {
-    throw new Error("No heading found for month");
+    throw new Error("No heading found for " + type);
   }
 
   return heading.shadowRoot!.textContent;
+}
+export function getMonthHeading(month: MonthInstance) {
+  return getHeading(month, "month");
+}
+export function getYearHeading(year: YearInstance) {
+  return getHeading(year, "year");
 }
 
 export function getPrevPageButton(calendar: CalendarInstance) {
@@ -131,8 +147,8 @@ export function getNextPageButton(calendar: CalendarInstance) {
   return page.elementLocator(button);
 }
 
-export function getTodayButton(month: MonthInstance) {
-  const button = month.shadowRoot!.querySelector<HTMLButtonElement>(
+export function getTodayButton(instance: MonthInstance | YearInstance) {
+  const button = instance.shadowRoot!.querySelector<HTMLButtonElement>(
     `button[part~="today"]`,
   )!;
   return page.elementLocator(button);
@@ -141,6 +157,14 @@ export function getTodayButton(month: MonthInstance) {
 export function getSelectedDays(month: MonthInstance) {
   return [
     ...month.shadowRoot!.querySelectorAll<HTMLButtonElement>(
+      `button[aria-pressed="true"]`,
+    ),
+  ];
+}
+
+export function getSelectedMonths(year: YearInstance) {
+  return [
+    ...year.shadowRoot!.querySelectorAll<HTMLButtonElement>(
       `button[aria-pressed="true"]`,
     ),
   ];
@@ -164,6 +188,32 @@ export async function clickDay(
   options?: { force?: boolean },
 ) {
   const button = getDayButton(month, dateLabel);
+
+  if (!button) {
+    throw new Error(`No button found for date: ${dateLabel}`);
+  }
+
+  await page.elementLocator(button).click(options);
+}
+
+export function getMonthButton(year: YearInstance, dateLabel: string) {
+  const grid = getGrid(year);
+
+  if (!grid) {
+    throw new Error(`No grid found for date: ${dateLabel}`);
+  }
+
+  return grid.querySelector<HTMLButtonElement>(
+    `button[aria-label="${dateLabel}"]`,
+  )!;
+}
+
+export async function clickMonth(
+  year: YearInstance,
+  dateLabel: string,
+  options?: { force?: boolean },
+) {
+  const button = getMonthButton(year, dateLabel);
 
   if (!button) {
     throw new Error(`No button found for date: ${dateLabel}`);

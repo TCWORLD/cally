@@ -1,5 +1,5 @@
-import { c, css, useContext, useRef, type Host } from "atomico";
-import { reset, vh } from "../utils/styles.js";
+import { c, useContext, useRef, type Host } from "atomico";
+import { cal, reset, vh } from "../utils/styles.js";
 import { useCalendarMonth } from "./useCalendarMonth.js";
 import { CalendarContext } from "./CalendarMonthContext.js";
 import { CalendarHeading } from "../calendar-heading/calendar-heading.js";
@@ -106,66 +106,7 @@ export const CalendarMonth = c(
     styles: [
       reset,
       vh,
-      css`
-        :host {
-          --color-accent: black;
-          --color-text-on-accent: white;
-
-          display: flex;
-          flex-direction: column;
-          gap: 0.25rem;
-          text-align: center;
-          inline-size: fit-content;
-        }
-
-        table {
-          border-collapse: collapse;
-          font-size: 0.875rem;
-        }
-
-        th {
-          inline-size: 2.25rem;
-          block-size: 2.25rem;
-        }
-
-        td {
-          padding-inline: 0;
-        }
-
-        .num {
-          font-variant-numeric: tabular-nums;
-        }
-
-        button {
-          color: inherit;
-          font-size: inherit;
-          background: transparent;
-          border: 0;
-          block-size: 2.25rem;
-          inline-size: 2.25rem;
-        }
-
-        button:hover:where(:not(:disabled, [aria-disabled])) {
-          background: #0000000d;
-        }
-
-        button:is([aria-pressed="true"], :focus-visible) {
-          background: var(--color-accent);
-          color: var(--color-text-on-accent);
-        }
-
-        button:focus-visible {
-          outline: 1px solid var(--color-text-on-accent);
-          outline-offset: -2px;
-        }
-
-        button:disabled,
-        :host::part(outside),
-        :host::part(disallowed) {
-          cursor: default;
-          opacity: 0.5;
-        }
-      `,
+      cal,
     ],
   }
 );

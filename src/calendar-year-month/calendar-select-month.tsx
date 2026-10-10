@@ -1,6 +1,6 @@
 import { c, useContext, useEvent, useMemo, type Host } from "atomico";
 import { CalendarContext } from "../calendar-month/CalendarMonthContext.js";
-import { useDateFormatter } from "../utils/hooks.js";
+import { useMonthNames } from "../utils/hooks.js";
 import { PlainDate, PlainYearMonth } from "../utils/temporal.js";
 import {
   SelectBase,
@@ -17,21 +17,7 @@ function useCalendarSelectMonth(props: { formatMonth: "long" | "short" }) {
     () => ({ month: props.formatMonth }) as const,
     [props.formatMonth]
   );
-  const formatter = useDateFormatter(formatOptions, locale);
-
-  const monthNames = useMemo(() => {
-    const months = [];
-    const day = new Date();
-    day.setUTCDate(1);
-
-    for (var i = 0; i < 12; i++) {
-      const index = (day.getUTCMonth() + 12) % 12;
-      months[index] = formatter.format(day);
-      day.setUTCMonth(day.getUTCMonth() + 1);
-    }
-
-    return months;
-  }, [formatter]);
+  const monthNames = useMonthNames(formatOptions, locale);
 
   const focusedYearMonth = focusedDate.toPlainYearMonth();
   const options: MonthOption[] = monthNames.map((label, index) => {
