@@ -8,6 +8,17 @@ const ISO_DATE = /^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[0-1])$/;
 const padZero = (value: number, length: number) =>
   value.toString().padStart(length, "0");
 
+export type PlainDateLike = PlainDate | DateLikeObject | string;
+export type PlainYearMonthLike = PlainYearMonth | YearMonthLikeObject | string;
+
+export interface DateLikeObject {
+    year: number;
+    month: number;
+    day: number;
+}
+
+export interface YearMonthLikeObject extends Omit<DateLikeObject, "day"> {}
+
 export class PlainDate {
   constructor(
     public readonly year: number,
@@ -54,11 +65,17 @@ export class PlainDate {
     return new PlainYearMonth(this.year, this.month);
   }
 
-  equals(date: PlainDate): boolean {
+  equals(date: PlainDateLike) {
     return PlainDate.compare(this, date) === 0;
   }
 
-  static compare(a: PlainDate, b: PlainDate): CompareResult {
+  static compare(a: PlainDateLike, b: PlainDateLike): CompareResult {
+    if (typeof a === "string") {
+      a = PlainDate.from(a);
+    }
+    if (typeof b === "string") {
+      b = PlainDate.from(b);
+    }
     if (a.year < b.year) return -1;
     if (a.year > b.year) return 1;
     if (a.month < b.month) return -1;
@@ -68,7 +85,7 @@ export class PlainDate {
     return 0;
   }
 
-  static from(value: string | Date): PlainDate {
+  static from(value: PlainDateLike | Date): PlainDate {
     if (typeof value === "string") {
       const match = value.match(ISO_DATE);
 
@@ -83,12 +100,14 @@ export class PlainDate {
         parseInt(day!, 10)
       );
     }
-
-    return new PlainDate(
-      value.getUTCFullYear(),
-      value.getUTCMonth() + 1,
-      value.getUTCDate()
-    );
+    if (value instanceof Date) {
+      return new PlainDate(
+        value.getUTCFullYear(),
+        value.getUTCMonth() + 1,
+        value.getUTCDate()
+      );
+    }
+    return new PlainDate(value.year, value.month, value.day);
   }
 }
 
@@ -108,8 +127,8 @@ export class PlainYearMonth {
     return new PlainYearMonth(date.getUTCFullYear(), date.getUTCMonth() + 1);
   }
 
-  equals(date: PlainDate | PlainYearMonth) {
-    return this.year === date.year && this.month === date.month;
+  equals(date: PlainYearMonthLike) {
+    return PlainYearMonth.compare(this, date) === 0;
   }
 
   toPlainDate() {
@@ -117,13 +136,42 @@ export class PlainYearMonth {
   }
 
   static compare(
-    a: PlainYearMonth | { year: number; month: number },
-    b: PlainYearMonth | { year: number; month: number }
+    a: PlainYearMonthLike,
+    b: PlainYearMonthLike
   ): CompareResult {
+    if (typeof a === "string") {
+      a = PlainYearMonth.from(a);
+    }
+    if (typeof b === "string") {
+      b = PlainYearMonth.from(b);
+    }
     if (a.year < b.year) return -1;
     if (a.year > b.year) return 1;
     if (a.month < b.month) return -1;
     if (a.month > b.month) return 1;
     return 0;
+  }
+
+  static from(value: PlainYearMonthLike | Date): PlainYearMonth {
+    if (typeof value === "string") {
+      const match = value.match(ISO_DATE);
+
+      if (!match) {
+        throw new TypeError(value);
+      }
+
+      const [, year, month, ] = match;
+      return new PlainYearMonth(
+        parseInt(year!, 10),
+        parseInt(month!, 10)
+      );
+    }
+    if (value instanceof Date) {
+      return new PlainYearMonth(
+        value.getUTCFullYear(),
+        value.getUTCMonth() + 1
+      );
+    }
+    return new PlainYearMonth(value.year, value.month);
   }
 }
