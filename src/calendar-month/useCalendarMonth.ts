@@ -13,7 +13,7 @@ import type { PlainDate } from "../utils/temporal.js";
 import type { CalendarContextValue } from "./CalendarMonthContext.js";
 
 const inRange = (date: PlainDate, min?: PlainDate, max?: PlainDate) =>
-  clamp(date, min, max) === date;
+  date.equals(clamp(date, min, max));
 
 const isLTR = (e: Event) => (e.target as HTMLElement).matches(":dir(ltr)");
 
