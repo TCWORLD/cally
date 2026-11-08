@@ -1,5 +1,5 @@
 import { c, useContext, useEvent, type Host } from "atomico";
-import { CalendarContext } from "../calendar-month/CalendarMonthContext.js";
+import { CalendarContext } from "../calendar-base/CalendarBaseContext.js";
 import { PlainDate } from "../utils/temporal.js";
 import {
   SelectBase,

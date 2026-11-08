@@ -1,19 +1,20 @@
 import { createContext } from "atomico";
+import { getToday } from "../utils/date.js";
 import type { PlainDate, PlainYearMonth } from "../utils/temporal.js";
-import { getToday, type DaysOfWeek } from "../utils/date.js";
+import type { DaysOfWeek } from "../utils/date.js";
 
 interface CalendarContextBase {
   min?: PlainDate;
   max?: PlainDate;
   today?: PlainDate;
-  firstDayOfWeek: DaysOfWeek;
+  focusedDate: PlainDate;
+  page: { start: PlainYearMonth; end: PlainYearMonth };
   isDateDisallowed?: (date: Date) => boolean;
   getDayParts?: (date: Date) => string;
-  page: { start: PlainYearMonth; end: PlainYearMonth };
-  focusedDate: PlainDate;
+  locale?: string;
+  firstDayOfWeek: DaysOfWeek;
   showOutsideDays?: boolean;
   showWeekNumbers?: boolean;
-  locale?: string;
   formatWeekday: "narrow" | "short";
 }
 

@@ -1,5 +1,5 @@
 import { c, useContext, useEvent, useMemo, type Host } from "atomico";
-import { CalendarContext } from "../calendar-month/CalendarMonthContext.js";
+import { CalendarContext } from "../calendar-base/CalendarBaseContext.js";
 import { useMonthNames } from "../utils/hooks.js";
 import { PlainDate, PlainYearMonth } from "../utils/temporal.js";
 import {

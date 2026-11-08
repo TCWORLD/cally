@@ -1,10 +1,10 @@
 import { css } from "atomico";
-import {
-  CalendarContext,
-  type CalendarDateContext,
-  type CalendarMultiContext,
-  type CalendarRangeContext,
-} from "../calendar-month/CalendarMonthContext.js";
+import { CalendarContext } from "./CalendarBaseContext.js";
+import type {
+   CalendarDateContext,
+   CalendarMultiContext,
+   CalendarRangeContext,
+} from "./CalendarBaseContext.js";
 import { CalendarHeading } from "../calendar-heading/calendar-heading.js";
 import { reset, vh } from "../utils/styles.js";
 import { type DaysOfWeek } from "../utils/date.js";
@@ -97,17 +97,21 @@ export const props = {
     type: String,
     value: "",
   },
+  focusedDate: {
+    type: String,
+    value: (): string | undefined => undefined,
+  },
   isDateDisallowed: {
     type: Function,
     value: (date: Date) => false,
   },
-  formatWeekday: {
-    type: String,
-    value: (): "narrow" | "short" => "narrow",
-  },
   getDayParts: {
     type: Function,
     value: (date: Date): string => "",
+  },
+  locale: {
+    type: String,
+    value: (): string | undefined => undefined,
   },
   firstDayOfWeek: {
     type: Number,
@@ -117,25 +121,21 @@ export const props = {
     type: Boolean,
     value: false,
   },
-  locale: {
+  showWeekNumbers: {
+    type: Boolean,
+    value: false,
+  },
+  formatWeekday: {
     type: String,
-    value: (): string | undefined => undefined,
+    value: (): "narrow" | "short" => "narrow",
   },
   months: {
     type: Number,
     value: 1,
   },
-  focusedDate: {
-    type: String,
-    value: (): string | undefined => undefined,
-  },
   pageBy: {
     type: String,
     value: (): Pagination => "months",
-  },
-  showWeekNumbers: {
-    type: Boolean,
-    value: false,
   },
 };
 

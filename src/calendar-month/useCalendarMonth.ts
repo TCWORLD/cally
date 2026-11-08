@@ -10,7 +10,7 @@ import {
   getToday,
 } from "../utils/date.js";
 import type { PlainDate } from "../utils/temporal.js";
-import type { CalendarContextValue } from "./CalendarMonthContext.js";
+import type { CalendarContextValue } from "../calendar-base/CalendarBaseContext.js";
 
 const inRange = (date: PlainDate, min?: PlainDate, max?: PlainDate) =>
   date.equals(clamp(date, min, max));

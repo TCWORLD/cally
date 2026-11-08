@@ -1,7 +1,7 @@
 import { c, useContext, useRef, type Host } from "atomico";
 import { cal, reset, vh } from "../utils/styles.js";
 import { useCalendarMonth } from "./useCalendarMonth.js";
-import { CalendarContext } from "./CalendarMonthContext.js";
+import { CalendarContext } from "../calendar-base/CalendarBaseContext.js";
 import { CalendarHeading } from "../calendar-heading/calendar-heading.js";
 import { getWeekNumber } from "../utils/date.js";
 

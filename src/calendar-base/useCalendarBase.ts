@@ -8,7 +8,7 @@ import {
 } from "atomico";
 import { CalendarHeadingContext } from "../calendar-heading/CalendarHeadingContext.js";
 import { PlainDate, PlainYearMonth } from "../utils/temporal.js";
-import { useDateProp, useDateFormatter } from "../utils/hooks.js";
+import { useDateProp } from "../utils/hooks.js";
 import { clamp, endOfMonth, toDate, getToday } from "../utils/date.js";
 
 export interface PageChangeDetail {

@@ -18,7 +18,7 @@ import {
   type CalendarDateContext,
   type CalendarMultiContext,
   type CalendarRangeContext,
-} from "./CalendarMonthContext.js";
+} from "../calendar-base/CalendarBaseContext.js";
 import { CalendarMonth } from "../calendar-month/calendar-month.js";
 import { fixture } from "atomico/test-dom";
 import { PlainDate } from "../utils/temporal.js";
