@@ -1,4 +1,5 @@
 import { CalendarMonth } from "./calendar-month/calendar-month";
+import { CalendarYear } from "./calendar-year/calendar-year";
 import { CalendarDate } from "./calendar-date/calendar-date";
 import { CalendarSelectYear } from "./calendar-year-month/calendar-select-year";
 import { CalendarSelectMonth } from "./calendar-year-month/calendar-select-month";
@@ -8,6 +9,7 @@ import { CalendarHeading } from "./calendar-heading/calendar-heading";
 
 export {
   CalendarMonth,
+  CalendarYear,
   CalendarDate,
   CalendarRange,
   CalendarMulti,
@@ -28,6 +30,7 @@ type ComponentProps<T extends abstract new (...args: any) => any> = Simplify<
 
 // export props for use in react/vue/etc
 export type CalendarMonthProps = ComponentProps<typeof CalendarMonth>;
+export type CalendarYearProps = ComponentProps<typeof CalendarYear>;
 export type CalendarDateProps = ComponentProps<typeof CalendarDate>;
 export type CalendarRangeProps = ComponentProps<typeof CalendarRange>;
 export type CalendarMultiProps = ComponentProps<typeof CalendarMulti>;

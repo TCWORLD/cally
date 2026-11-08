@@ -160,7 +160,7 @@ export function useCalendarBase({
     const target = options?.target ?? "day";
     if (target === "day") {
       host.current
-        .querySelectorAll<HTMLElement>("calendar-month")
+        .querySelectorAll<HTMLElement>("calendar-month, calendar-year")
         .forEach((m) => m.focus(options));
     } else {
       host.current

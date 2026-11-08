@@ -129,6 +129,14 @@ export const props = {
     type: String,
     value: (): "narrow" | "short" => "narrow",
   },
+  showQuarterNumbers: {
+    type: Boolean,
+    value: false,
+  },
+  formatMonth: {
+    type: String,
+    value: (): "long" | "short" | "numeric" | "narrow" | "2-digit" => "long",
+  },
   months: {
     type: Number,
     value: 1,

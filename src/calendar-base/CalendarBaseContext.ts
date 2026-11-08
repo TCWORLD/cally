@@ -14,8 +14,12 @@ interface CalendarContextBase {
   locale?: string;
   firstDayOfWeek: DaysOfWeek;
   showOutsideDays?: boolean;
+  // Calendar Month
   showWeekNumbers?: boolean;
   formatWeekday: "narrow" | "short";
+  // Calendar Year
+  showQuarterNumbers?: boolean;
+  formatMonth: "long" | "short" | "numeric" | "narrow" | "2-digit";
 }
 
 export interface CalendarDateContext extends CalendarContextBase {
