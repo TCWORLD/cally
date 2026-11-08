@@ -29,6 +29,13 @@ export function getWeekNumber(plainDate: PlainDate) {
   );
 }
 
+export function getQuarterNumber(plainDate: PlainDate) {
+  const date = toDate(plainDate);
+  return (
+    Math.floor(date.getUTCMonth() / 3)
+  );
+}
+
 export function startOfWeek(
   date: PlainDate,
   firstDayOfWeek: DaysOfWeek = 0
@@ -85,6 +92,16 @@ type Week = [
   PlainDate,
 ];
 
+const oneMonth = { months: 1 };
+
+type Quarter = [
+  PlainYearMonth,
+  PlainYearMonth,
+  PlainYearMonth,
+];
+
+const oneYear = { years: 1 };
+
 /**
  * given a date, return an array of dates from a calendar perspective
  */
@@ -111,6 +128,37 @@ export function getViewOfMonth(
   }
 
   return weeks;
+}
+
+/**
+ * Given a date, return an array of quarters from a calendar perspective
+ * Optionally expand to include the specified number of quarters before 
+ * and after the selected year.
+ */
+export function getViewOfYear(
+  year: PlainYearMonth,
+  expand = 0
+): Quarter[] {
+  const grow = (expand + 1) * 3;
+  let start = startOfYear(year).add({"months": -grow}).toPlainYearMonth();
+  const end = endOfYear(year).add({"months": grow});
+
+  const quarters = [];
+
+  // get all days in range
+  while (PlainYearMonth.compare(start, end) < 0) {
+    const quarter = [];
+
+    // chunk into quarters
+    for (let i = 0; i < 3; i++) {
+      quarter.push(start);
+      start = start.add(oneMonth);
+    }
+
+    quarters.push(quarter as Quarter);
+  }
+
+  return quarters;
 }
 
 interface DateLike {
